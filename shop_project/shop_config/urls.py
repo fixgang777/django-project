@@ -6,7 +6,7 @@ from core import views as core_views  # Импортируем модуль view
 urlpatterns = [
     # Теперь мы ОБЯЗАТЕЛЬНО пишем core_views. перед названием функции
     path('', core_views.home_page, name='home'),
-    path('reviews-list/', core_views.reviews_page, name='reviews_page'),
+    path('api/reviews/', include('reviews.urls')),
     path('admin/', admin.site.urls),
     path('api/shop/', include('core.urls')),
 ]
