@@ -1,13 +1,18 @@
 from django.db import models
-from django.contrib.auth.models import User
 from core.models import Product
 
 class Review(models.Model):
-    product = models.ForeignKey(Product, related_name='reviews', on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # Делаем привязку к товару необязательной
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        related_name='reviews',
+        null=True,
+        blank=True
+    )
     text = models.TextField()
-    rating = models.PositiveIntegerField(default=5)
+    rating = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Review for {self.product.name}"
+        return f"Отзыв: {self.text[:20]}... ({self.rating}/5)"

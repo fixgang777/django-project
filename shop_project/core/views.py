@@ -2,21 +2,26 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from .models import Product, Category
 from .serializers import ProductSerializer, CategorySerializer
+from reviews.models import Review
 
-# Главная страница магазина
+# Главная страница
 def home_page(request):
-    return render(request, 'core/index.html')
+    products = Product.objects.all()
+    reviews = Review.objects.all().order_by('-created_at')[:3]
+    return render(request, 'core/index.html', {
+        'products': products,
+        'reviews': reviews
+    })
 
-# Страница со всеми отзывами
+# Страница отзывов
 def reviews_page(request):
     return render(request, 'core/reviews.html')
 
-# API для категорий
-class CategoryViewSet(viewsets.ModelViewSet):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-
-# API для продуктов
+# API
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer

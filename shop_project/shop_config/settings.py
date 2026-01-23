@@ -2,19 +2,9 @@ import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-# ВАЖНО: На Render ключ будет браться из переменных окружения, которые мы заполняли
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-j5yvc)a7q5)0#$^up25jjwnpuu#_h1k&_s#b#bmcbi5!m7sr0h')
-
-# На сервере DEBUG должен быть False, но для теста оставим True.
-# Если сайт заработает, поменяй на False.
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-your-key')
 DEBUG = True
-
-# Добавляем адрес твоего сайта на Render
 ALLOWED_HOSTS = ['my-shop-project.onrender.com', '127.0.0.1', 'localhost']
-
-ENABLE_REVIEWS = True
-ENABLE_PROMOTIONS = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -25,16 +15,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'core',
+    'reviews',
+    'promotions',
 ]
-
-if ENABLE_REVIEWS:
-    INSTALLED_APPS.append('reviews')
-if ENABLE_PROMOTIONS:
-    INSTALLED_APPS.append('promotions')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Добавили для работы CSS/картинок
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -48,8 +35,8 @@ ROOT_URLCONF = 'shop_config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+        'DIRS': [BASE_DIR / 'templates'], # Если есть общая папка
+        'APP_DIRS': True, # Чтобы видел core/templates/core/
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.request',
@@ -60,28 +47,13 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'shop_config.wsgi.application'
+DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': BASE_DIR / 'db.sqlite3'}}
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
-]
-
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
-USE_I18N = True
-USE_TZ = True
-
-# Настройки статики
 STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # Папка, куда соберутся файлы для Render
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

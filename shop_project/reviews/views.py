@@ -1,13 +1,9 @@
-from rest_framework import viewsets, serializers, permissions
+from rest_framework import viewsets, permissions
 from .models import Review
-
-class ReviewSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Review
-        fields = '__all__'
+from .serializers import ReviewSerializer
 
 class ReviewViewSet(viewsets.ModelViewSet):
-    queryset = Review.objects.all()
+    queryset = Review.objects.all().order_by('-created_at')
     serializer_class = ReviewSerializer
-    # Позволяет любому пользователю просматривать и добавлять отзывы
+    # Это разрешает твоему HTML-коду видеть отзывы и отправлять их
     permission_classes = [permissions.AllowAny]

@@ -2,135 +2,167 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Отзывы - TECH SHOP</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TECH SHOP — Лучшая электроника</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #f4f7f6; }
-        .navbar { background: linear-gradient(90deg, #2c3e50, #000000); }
-        .review-card { border: none; border-radius: 12px; margin-bottom: 15px; border-left: 5px solid #0d6efd; }
-        .form-section { background: white; border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        :root {
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --accent: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --text-white: #f8fafc;
+            --text-gray: #94a3b8;
+            --sale: #ef4444;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background: var(--bg);
+            color: var(--text-white);
+            scroll-behavior: smooth;
+        }
+
+        /* Шапка с эффектом размытия */
+        header {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            position: fixed;
+            top: 0; width: 100%; z-index: 1000;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px; margin: 0 auto; padding: 0 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        nav a {
+            color: var(--text-gray); text-decoration: none;
+            margin-left: 25px; font-weight: 600; font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        nav a:hover { color: var(--accent); }
+        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -1px; }
+
+        .container { max-width: 1200px; margin: 100px auto 40px; padding: 0 20px; }
+
+        h1 { font-size: 3rem; font-weight: 800; margin-bottom: 40px; background: linear-gradient(90deg, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* Сетка товаров */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 25px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            border-color: var(--accent);
+        }
+
+        .badge {
+            background: var(--sale); color: white;
+            padding: 6px 12px; border-radius: 12px;
+            position: absolute; top: 20px; right: 20px;
+            font-size: 0.75rem; font-weight: 800;
+            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4);
+        }
+
+        .card h3 { font-size: 1.4rem; margin: 15px 0 10px; }
+        .card p { color: var(--text-gray); font-size: 0.95rem; line-height: 1.6; }
+
+        .price-box { margin-top: 20px; display: flex; align-items: center; gap: 12px; }
+        .old-price { text-decoration: line-through; color: var(--text-gray); font-size: 1rem; }
+        .new-price { color: var(--accent); font-weight: 800; font-size: 1.5rem; }
+
+        .buy-btn {
+            margin-top: 20px; width: 100%;
+            background: var(--accent); color: var(--bg);
+            border: none; padding: 12px; border-radius: 14px;
+            font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .buy-btn:hover { background: var(--accent-hover); transform: scale(1.02); }
+
+        /* Отзывы */
+        .reviews-section { margin-top: 80px; }
+        .review-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
+
+        .review-box {
+            background: rgba(255,255,255,0.03);
+            padding: 20px; border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .rating { color: #fbbf24; margin-bottom: 10px; display: block; }
     </style>
 </head>
 <body>
 
-<nav class="navbar navbar-dark mb-4">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="/">🚀 TECH SHOP</a>
-        <a href="/" class="btn btn-outline-light btn-sm">К товарам</a>
+<header>
+    <div class="header-content">
+        <div class="logo">🚀 TECH SHOP</div>
+        <nav>
+            <a href="/">ГЛАВНАЯ</a>
+            <a href="/reviews/">ОТЗЫВЫ</a>
+            <a href="/admin/">АДМИНКА</a>
+        </nav>
     </div>
-</nav>
+</header>
 
 <div class="container">
-    <div class="row">
-        <div class="col-md-5 mb-4">
-            <div class="form-section">
-                <h4 class="mb-3">Оставить отзыв</h4>
-                <div class="mb-3">
-                    <label class="form-label">Ваше впечатление</label>
-                    <textarea id="rev-text" class="form-control" rows="3" placeholder="Что вы думаете о магазине?"></textarea>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Оценка (1-5)</label>
-                    <input type="number" id="rev-rating" class="form-control" min="1" max="5" value="5">
-                </div>
-                <button onclick="submitReview()" class="btn btn-primary w-100 fw-bold">Опубликовать</button>
-                <div id="status-msg" class="mt-2"></div>
-            </div>
-        </div>
+    <h1>🔥 Тренды сезона</h1>
 
-        <div class="col-md-7">
-            <h4 class="mb-3">Все отзывы</h4>
-            <div id="reviews-list">
-                <div class="text-center py-5">
-                    <div class="spinner-border text-primary"></div>
-                </div>
+    <div class="product-grid">
+        {% for product in products %}
+        <div class="card">
+            {% if product.discount_price %}
+                <span class="badge">ВЫГОДА %</span>
+            {% endif %}
+
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.description|truncatewords:15 }}</p>
+
+            <div class="price-box">
+                {% if product.discount_price %}
+                    <span class="old-price">{{ product.price }} ₽</span>
+                    <span class="new-price">{{ product.discount_price|floatformat:0 }} ₽</span>
+                {% else %}
+                    <span class="new-price" style="color: white;">{{ product.price }} ₽</span>
+                {% endif %}
             </div>
+
+            <button class="buy-btn">В корзину</button>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="reviews-section">
+        <h2>💬 Что говорят клиенты</h2>
+        <div class="review-grid">
+            {% for review in reviews %}
+            <div class="review-box">
+                <span class="rating">
+                    {% if review.rating == 5 %}⭐⭐⭐⭐⭐{% elif review.rating == 4 %}⭐⭐⭐⭐{% else %}⭐⭐⭐{% endif %}
+                </span>
+                <p style="margin: 0; font-style: italic; color: var(--text-gray)">"{{ review.text }}"</p>
+            </div>
+            {% endfor %}
         </div>
     </div>
 </div>
-
-<script>
-    // 1. ЗАГРУЗКА ОТЗЫВОВ
-    async function loadReviews() {
-        const list = document.getElementById('reviews-list');
-        try {
-            // Путь к твоему новому API
-            const response = await fetch('/api/reviews/list/');
-            const reviews = await response.json();
-
-            list.innerHTML = '';
-            if (reviews.length === 0) {
-                list.innerHTML = '<div class="alert alert-light text-center">Отзывов пока нет. Будьте первым!</div>';
-                return;
-            }
-
-            reviews.reverse().forEach(r => { // Последние отзывы сверху
-                list.innerHTML += `
-                    <div class="card review-card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="text-warning">⭐ ${r.rating}/5</h5>
-                            <p class="mb-0">${r.text}</p>
-                            <small class="text-muted">ID отзыва: ${r.id}</small>
-                        </div>
-                    </div>`;
-            });
-        } catch (e) {
-            list.innerHTML = '<div class="alert alert-danger">Не удалось загрузить отзывы</div>';
-        }
-    }
-
-    // 2. ОТПРАВКА ОТЗЫВА
-    async function submitReview() {
-        const text = document.getElementById('rev-text').value;
-        const rating = document.getElementById('rev-rating').value;
-        const status = document.getElementById('status-msg');
-
-        if (!text) {
-            alert("Пожалуйста, напишите текст отзыва");
-            return;
-        }
-
-        try {
-            const response = await fetch('/api/reviews/list/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    // Добавь это, если Django будет ругаться на CSRF:
-                    'X-CSRFToken': getCookie('csrftoken')
-                },
-                body: JSON.stringify({ text, rating })
-            });
-
-            if (response.ok) {
-                status.innerHTML = '<div class="text-success small">✅ Отзыв успешно добавлен!</div>';
-                document.getElementById('rev-text').value = ''; // Очистить форму
-                loadReviews(); // Обновить список
-            } else {
-                throw new Error();
-            }
-        } catch (e) {
-            status.innerHTML = '<div class="text-danger small">❌ Ошибка при отправке. Попробуйте позже.</div>';
-        }
-    }
-
-    // Функция для получения CSRF токена (нужна для Django)
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-
-    loadReviews(); // Загружаем при открытии страницы
-</script>
 
 </body>
 </html>
